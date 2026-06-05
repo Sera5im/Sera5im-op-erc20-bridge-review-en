@@ -1,4 +1,5 @@
 # Optimism Standard Bridge ERC20 Review
+<img width="1672" height="941" alt="image" src="https://github.com/user-attachments/assets/859bb399-ab94-4b27-a93f-018af87cbb9b" />
 
 This repository contains my review notes on the Optimism Standard Bridge ERC20 paths.
 
