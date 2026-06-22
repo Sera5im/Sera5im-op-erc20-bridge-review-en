@@ -3,16 +3,18 @@
 ## Flow
 
 ```mermaid
-flowchart LR
-    A["User Entry: withdraw(...)"] --> B["Core L2 Bridge: _initiateBridgeERC20"]
-    B --> C["Messenger Send"]
-    C --> D["L1 Finalize: finalizeBridgeERC20"]
-    D --> E["L1 Release: release original token"]
-
-    B --> B1["Internal Entry: _initiateWithdrawal"]
-    B1 --> B2["Resolve L1 Pair from L2 Token"]
-    B2 --> B3["Burn Representation Token"]
-    B3 --> C
+flowchart TD
+    A["User calls withdraw(...)"] --> B["_initiateWithdrawal(...)"]
+    B --> C["resolve L1 pair from L2 representation token"]
+    C --> D["_initiateBridgeERC20(...) on L2"]
+    D --> E["mintable L2 token branch"]
+    E --> F["burn representation token"]
+    F --> G["messenger.sendMessage(...)"]
+    G --> H["L2 -> L1 messenger / portal delivery segment"]
+    H --> I["finalizeERC20Withdrawal(...)"]
+    I --> J["finalizeBridgeERC20(...) on L1"]
+    J --> K["ordinary L1 token branch"]
+    K --> L["deposits -= amount / release original token"]
 ```
 
 `L2 -> L1 messenger / portal delivery segment` is shown here only as the transport segment of the full withdraw path. Messenger / portal / proving internals are outside my current review scope.
