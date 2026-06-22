@@ -3,16 +3,13 @@
 ## Flow
 
 ```mermaid
-flowchart TD
-    A["User calls depositERC20 / depositERC20To"] --> B["_initiateERC20Deposit(...)"]
-    B --> C["_initiateBridgeERC20(...) on L1"]
-    C --> D["ordinary L1 token branch"]
-    D --> E["lock token / update deposits accounting"]
-    E --> F["messenger.sendMessage(...)"]
-    F --> G["L1 -> L2 messenger delivery segment"]
-    G --> H["finalizeBridgeERC20(...) on L2"]
-    H --> I["mintable L2 token branch"]
-    I --> J["mint representation token to recipient"]
+flowchart LR
+    A["User Entry: depositERC20 / depositERC20To"] --> B["Core L1 Bridge: _initiateBridgeERC20"] --> C["Messenger Send"] --> D["L2 Finalize: finalizeBridgeERC20"] --> E["L2 Credit: mint to recipient"]
+
+    B --> B1["Internal Entry: _initiateERC20Deposit"]
+    B1 --> B2["Ordinary L1 Token Branch"]
+    B2 --> B3["Lock Token / Update Deposits"]
+    B3 --> C
 ```
 
 `L1 -> L2 messenger delivery segment` is shown here only as the transport segment of the full deposit path. Messenger / portal internals are outside my current review scope.
